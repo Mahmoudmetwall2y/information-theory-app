@@ -278,99 +278,68 @@
                                 <span class="gradient-text">6-Stage Processing Pipeline</span>
                             </h3>
                             <div class="space-y-3">
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">1</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Symbol Analysis</div>
                                         <div class="text-sm text-gray-400">Calculate character probabilities and frequencies</div>
+                                        <div id="symbol-analysis-result" class="stage-output mt-3 hidden bg-slate-800/60 rounded-lg p-3 text-sm text-gray-200">
+                                            <div class="text-xs uppercase tracking-wide text-cyan-300 mb-1">Probabilities</div>
+                                            <div id="probabilities"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">2</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Huffman Encoding</div>
                                         <div class="text-sm text-gray-400">Build optimal prefix tree and generate codes</div>
+                                        <pre id="encoded-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">3</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Huffman Decoding</div>
                                         <div class="text-sm text-gray-400">Decode compressed bitstream back to text</div>
+                                        <pre id="decoded-preview" class="stage-output hidden mt-3 text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">4</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-purple-400">Hamming Encoding</div>
                                         <div class="text-sm text-gray-400">Add error correction codes (7,4) to bitstream</div>
+                                        <pre id="hamming-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">5</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-red-400">Error Simulation</div>
-                                        <div class="text-sm text-gray-400">Inject bit errors and decode without correction</div>
+                                        <div class="text-sm text-gray-400">Inject bit errors into the encoded stream</div>
+                                        <pre id="corrupted-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
+                                <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
                                     <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">6</div>
-                                    <div>
+                                    <div class="flex-1">
                                         <div class="font-semibold text-green-400">Error Correction</div>
                                         <div class="text-sm text-gray-400">Detect and correct errors using Hamming codes</div>
+                                        <div id="error-correction-results" class="stage-output hidden mt-3 space-y-2">
+                                            <pre id="recovered-preview" class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                            <p class="text-xs text-gray-400">Recovered Text: <span id="recovered-text">-</span></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pipeline Outputs -->
-                        <div class="mb-8" id="pipeline-output" style="display: none;">
-                            <h3 class="text-xl font-bold mb-4 text-center text-cyan-300">Pipeline Results</h3>
-                            <div class="space-y-4">
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">1</div>
-                                        <div class="font-semibold">Symbol Analysis</div>
-                                    </div>
-                                    <div class="text-sm text-gray-300" id="probabilities"></div>
-                                </div>
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">2</div>
-                                        <div class="font-semibold">Huffman Encoding</div>
-                                    </div>
-                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="encoded-preview">-</pre>
-                                </div>
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">3</div>
-                                        <div class="font-semibold">Huffman Decoding</div>
-                                    </div>
-                                    <pre class="text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="decoded-preview">-</pre>
-                                </div>
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">4</div>
-                                        <div class="font-semibold">Hamming Encoding</div>
-                                    </div>
-                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="hamming-preview">-</pre>
-                                </div>
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">5</div>
-                                        <div class="font-semibold">Error Simulation</div>
-                                    </div>
-                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="corrupted-preview">-</pre>
-                                    <p class="text-xs text-gray-400 mt-2">Decoded (without correction): <span id="corrupted-decode">-</span></p>
-                                </div>
-                                <div class="bg-slate-800/70 rounded-lg p-4">
-                                    <div class="flex items-center mb-2">
-                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">6</div>
-                                        <div class="font-semibold">Error Correction</div>
-                                    </div>
-                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="recovered-preview">-</pre>
-                                    <p class="text-xs text-gray-400 mt-2">Recovered Text: <span id="recovered-text">-</span></p>
-                                </div>
+                        <div id="uncorrected-section" class="mb-8 hidden">
+                            <h3 class="text-lg font-semibold text-red-300 mb-2 flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>Decoded Without Correction</h3>
+                            <div class="bg-slate-800/60 rounded-lg p-4">
+                                <p class="text-sm text-gray-400 mb-2">Text obtained after error simulation without applying Hamming correction.</p>
+                                <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
                             </div>
                         </div>
 
@@ -657,26 +626,52 @@
             recoveredOkElement.textContent = metrics.recovered_text_ok ? 'True' : 'False';
             recoveredOkElement.className = metrics.recovered_text_ok ? 'text-green-400' : 'text-red-400';
 
-            // Populate pipeline outputs
+            // Populate pipeline outputs inline with each stage
             const probabilitiesEl = document.getElementById('probabilities');
+            const symbolAnalysisResult = document.getElementById('symbol-analysis-result');
             if (results.top_probabilities?.length) {
                 const listItems = results.top_probabilities
                     .map(([char, prob]) => `<li class="flex justify-between"><span class="text-gray-400">${char === ' ' ? '(space)' : char}</span><span class="text-cyan-300 font-mono">${prob.toFixed(4)}</span></li>`)
                     .join('');
                 probabilitiesEl.innerHTML = `<ul class="space-y-1">${listItems}</ul>`;
+                symbolAnalysisResult.classList.remove('hidden');
             } else {
-                probabilitiesEl.textContent = 'No probability data available.';
+                probabilitiesEl.innerHTML = '';
+                symbolAnalysisResult.classList.add('hidden');
             }
 
-            document.getElementById('encoded-preview').textContent = results.encoded_bits_preview || '-';
-            document.getElementById('decoded-preview').textContent = results.decoded_text_preview || '-';
-            document.getElementById('hamming-preview').textContent = results.hamming_bits_preview || '-';
-            document.getElementById('corrupted-preview').textContent = results.corrupted_bits_preview || '-';
-            document.getElementById('corrupted-decode').textContent = results.corrupted_decoded_preview || '-';
-            document.getElementById('recovered-preview').textContent = results.recovered_bits_preview || '-';
-            document.getElementById('recovered-text').textContent = results.recovered_decoded_preview || '-';
+            const toggleStageContent = (elementId, content) => {
+                const el = document.getElementById(elementId);
+                if (content) {
+                    el.textContent = content;
+                    el.classList.remove('hidden');
+                } else {
+                    el.textContent = '';
+                    el.classList.add('hidden');
+                }
+            };
 
-            document.getElementById('pipeline-output').style.display = 'block';
+            toggleStageContent('encoded-preview', results.encoded_bits_preview);
+            toggleStageContent('decoded-preview', results.decoded_text_preview);
+            toggleStageContent('hamming-preview', results.hamming_bits_preview);
+            toggleStageContent('corrupted-preview', results.corrupted_bits_preview);
+
+            const corruptedDecode = document.getElementById('corrupted-decode');
+            corruptedDecode.textContent = results.corrupted_decoded_preview || '';
+            document.getElementById('uncorrected-section').classList.toggle('hidden', !results.corrupted_decoded_preview);
+
+            const recoveredPreview = document.getElementById('recovered-preview');
+            const recoveredContainer = recoveredPreview.parentElement;
+            if (results.recovered_bits_preview || results.recovered_decoded_preview) {
+                recoveredPreview.textContent = results.recovered_bits_preview || '';
+                recoveredContainer.classList.remove('hidden');
+            } else {
+                recoveredPreview.textContent = '';
+                recoveredContainer.classList.add('hidden');
+            }
+
+            const recoveredText = document.getElementById('recovered-text');
+            recoveredText.textContent = results.recovered_decoded_preview || '';
         }
     </script>
 </body>
