@@ -284,7 +284,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Symbol Analysis</div>
                                         <div class="text-sm text-gray-400">Calculate character probabilities and frequencies</div>
-                                        <div id="symbol-analysis-result" class="mt-3 hidden bg-slate-800/60 rounded-lg p-3 text-sm text-gray-200">
+                                        <div id="symbol-analysis-result" class="stage-output mt-3 hidden bg-slate-800/60 rounded-lg p-3 text-sm text-gray-200">
                                             <div class="text-xs uppercase tracking-wide text-cyan-300 mb-1">Probabilities</div>
                                             <div id="probabilities"></div>
                                         </div>
@@ -295,7 +295,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Huffman Encoding</div>
                                         <div class="text-sm text-gray-400">Build optimal prefix tree and generate codes</div>
-                                        <pre id="encoded-preview" class="hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                        <pre id="encoded-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
                                 <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
@@ -303,7 +303,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-cyan-400">Huffman Decoding</div>
                                         <div class="text-sm text-gray-400">Decode compressed bitstream back to text</div>
-                                        <pre id="decoded-preview" class="hidden mt-3 text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                        <pre id="decoded-preview" class="stage-output hidden mt-3 text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
                                 <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
@@ -311,7 +311,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-purple-400">Hamming Encoding</div>
                                         <div class="text-sm text-gray-400">Add error correction codes (7,4) to bitstream</div>
-                                        <pre id="hamming-preview" class="hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                        <pre id="hamming-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
                                 <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
@@ -319,7 +319,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-red-400">Error Simulation</div>
                                         <div class="text-sm text-gray-400">Inject bit errors into the encoded stream</div>
-                                        <pre id="corrupted-preview" class="hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                        <pre id="corrupted-preview" class="stage-output hidden mt-3 text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
                                 <div class="flex items-start p-3 bg-slate-700/30 rounded-lg">
@@ -327,7 +327,7 @@ t file">
                                     <div class="flex-1">
                                         <div class="font-semibold text-green-400">Error Correction</div>
                                         <div class="text-sm text-gray-400">Detect and correct errors using Hamming codes</div>
-                                        <div id="error-correction-results" class="hidden mt-3 space-y-2">
+                                        <div id="error-correction-results" class="stage-output hidden mt-3 space-y-2">
                                             <pre id="recovered-preview" class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                             <p class="text-xs text-gray-400">Recovered Text: <span id="recovered-text">-</span></p>
                                         </div>
@@ -635,34 +635,38 @@ t file">
                     .map(([char, prob]) => `<li class="flex justify-between"><span class="text-gray-400">${char === ' ' ? '(space)' : char}</span><span class="text-cyan-300 font-mono">${prob.toFixed(4)}</span></li>`)
                     .join('');
                 probabilitiesEl.innerHTML = `<ul class="space-y-1">${listItems}</ul>`;
+                symbolAnalysisResult.classList.remove('hidden');
             } else {
                 probabilitiesEl.textContent = 'No probability data available.';
+                symbolAnalysisResult.classList.add('hidden');
             }
-            symbolAnalysisResult.classList.remove('hidden');
 
             const encodedPreview = document.getElementById('encoded-preview');
             encodedPreview.textContent = results.encoded_bits_preview || '-';
-            encodedPreview.classList.remove('hidden');
+            encodedPreview.classList.toggle('hidden', !results.encoded_bits_preview);
 
             const decodedPreview = document.getElementById('decoded-preview');
             decodedPreview.textContent = results.decoded_text_preview || '-';
-            decodedPreview.classList.remove('hidden');
+            decodedPreview.classList.toggle('hidden', !results.decoded_text_preview);
 
             const hammingPreview = document.getElementById('hamming-preview');
             hammingPreview.textContent = results.hamming_bits_preview || '-';
-            hammingPreview.classList.remove('hidden');
+            hammingPreview.classList.toggle('hidden', !results.hamming_bits_preview);
 
             const corruptedPreview = document.getElementById('corrupted-preview');
             corruptedPreview.textContent = results.corrupted_bits_preview || '-';
-            corruptedPreview.classList.remove('hidden');
+            corruptedPreview.classList.toggle('hidden', !results.corrupted_bits_preview);
 
             const corruptedDecode = document.getElementById('corrupted-decode');
             corruptedDecode.textContent = results.corrupted_decoded_preview || '-';
-            document.getElementById('uncorrected-section').classList.remove('hidden');
+            document.getElementById('uncorrected-section').classList.toggle('hidden', !results.corrupted_decoded_preview);
 
-            document.getElementById('recovered-preview').textContent = results.recovered_bits_preview || '-';
-            document.getElementById('recovered-text').textContent = results.recovered_decoded_preview || '-';
-            document.getElementById('error-correction-results').classList.remove('hidden');
+            const recoveredPreview = document.getElementById('recovered-preview');
+            recoveredPreview.textContent = results.recovered_bits_preview || '-';
+            recoveredPreview.parentElement.classList.toggle('hidden', !results.recovered_bits_preview && !results.recovered_decoded_preview);
+
+            const recoveredText = document.getElementById('recovered-text');
+            recoveredText.textContent = results.recovered_decoded_preview || '-';
         }
     </script>
 </body>
