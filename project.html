@@ -410,6 +410,19 @@
                         </div>
 
                         <div id="uncorrected-section" class="mb-8 hidden">
+                            <div class="stage-card">
+                                <div class="stage-card__header text-red-200">
+                                    <span class="stage-chip text-red-200 border border-red-400/30"><i class="fas fa-exclamation-triangle"></i> Decoded Without Correction</span>
+                                    <span class="text-xs text-gray-400">Post-simulation preview</span>
+                                </div>
+                                <div class="stage-card__body space-y-2">
+                                    <p class="text-sm text-gray-400">Text obtained after error simulation without applying Hamming correction.</p>
+                                    <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="uncorrected-section" class="mb-8 hidden">
                             <h3 class="text-lg font-semibold text-red-300 mb-2 flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>Decoded Without Correction</h3>
                             <div class="bg-slate-800/60 rounded-lg p-4">
                                 <p class="text-sm text-gray-400 mb-2">Text obtained after error simulation without applying Hamming correction.</p>
@@ -501,7 +514,10 @@
             const removeFile = document.getElementById('remove-file');
             const runButton = document.getElementById('run-pipeline');
 
-            uploadZone.addEventListener('click', () => fileInput.click());
+            // Reset the input on every click so selecting the same file fires a change event
+            fileInput.addEventListener('click', () => {
+                fileInput.value = '';
+            });
             
             uploadZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -532,6 +548,7 @@
                 fileInfo.classList.add('hidden');
                 uploadZone.querySelector('div').style.display = 'block';
                 runButton.disabled = true;
+                window.uploadedFileContent = '';
             });
 
             function handleFileSelect(file) {
