@@ -393,6 +393,13 @@ t file">
                                             <p class="text-sm text-gray-300">Recovered Text: <span id="recovered-text" class="text-white/90">-</span></p>
                                         </div>
                                     </div>
+                                    <div class="stage-card__body space-y-3">
+                                        <p id="recovered-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <div id="error-correction-results" class="stage-output hidden space-y-2">
+                                            <pre id="recovered-preview" class="text-xs preview-surface bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                            <p class="text-sm text-gray-300">Recovered Text: <span id="recovered-text" class="text-white/90">-</span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -420,27 +427,6 @@ t file">
                                     <p class="text-sm text-gray-400">Text obtained after error simulation without applying Hamming correction.</p>
                                     <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div id="uncorrected-section" class="mb-8 hidden">
-                            <div class="stage-card">
-                                <div class="stage-card__header text-red-200">
-                                    <span class="stage-chip text-red-200 border border-red-400/30"><i class="fas fa-exclamation-triangle"></i> Decoded Without Correction</span>
-                                    <span class="text-xs text-gray-400">Post-simulation preview</span>
-                                </div>
-                                <div class="stage-card__body space-y-2">
-                                    <p class="text-sm text-gray-400">Text obtained after error simulation without applying Hamming correction.</p>
-                                    <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="uncorrected-section" class="mb-8 hidden">
-                            <h3 class="text-lg font-semibold text-red-300 mb-2 flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>Decoded Without Correction</h3>
-                            <div class="bg-slate-800/60 rounded-lg p-4">
-                                <p class="text-sm text-gray-400 mb-2">Text obtained after error simulation without applying Hamming correction.</p>
-                                <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
                             </div>
                         </div>
 
@@ -647,11 +633,12 @@ t file">
             pipelineStatus.className = 'status-indicator status-running';
             pipelineStatusText.textContent = 'Running';
 
+            let progressInterval;
             try {
                 const errorInterval = parseInt(document.getElementById('error-interval').value);
-                
+
                 let progress = 0;
-                const progressInterval = setInterval(() => {
+                progressInterval = setInterval(() => {
                     progress += Math.random() * 15;
                     if (progress > 95) progress = 95;
                     progressFill.style.width = `${progress}%`;
@@ -669,14 +656,24 @@ t file">
                     })
                 });
 
-                clearInterval(progressInterval);
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                const responseText = await response.text();
+                let responseData = null;
+                try {
+                    responseData = responseText ? JSON.parse(responseText) : null;
+                } catch (parseError) {
+                    throw new Error('Invalid response format from the server.');
                 }
 
-                const results = await response.json();
+                if (!response.ok) {
+                    const message = responseData?.error || responseText || `HTTP error! status: ${response.status}`;
+                    throw new Error(message);
+                }
+
+                if (!responseData) {
+                    throw new Error('Empty response received from the server.');
+                }
+
+                const results = responseData;
                 
                 progressFill.style.width = '100%';
                 progressPercentage.textContent = '100%';
@@ -701,6 +698,10 @@ t file">
                 statusText.textContent = 'Processing failed';
                 pipelineStatus.className = 'status-indicator status-error';
                 pipelineStatusText.textContent = 'Error';
+            } finally {
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                }
             }
         });
 
