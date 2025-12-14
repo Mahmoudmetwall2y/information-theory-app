@@ -637,36 +637,42 @@ t file">
                 probabilitiesEl.innerHTML = `<ul class="space-y-1">${listItems}</ul>`;
                 symbolAnalysisResult.classList.remove('hidden');
             } else {
-                probabilitiesEl.textContent = 'No probability data available.';
+                probabilitiesEl.innerHTML = '';
                 symbolAnalysisResult.classList.add('hidden');
             }
 
-            const encodedPreview = document.getElementById('encoded-preview');
-            encodedPreview.textContent = results.encoded_bits_preview || '-';
-            encodedPreview.classList.toggle('hidden', !results.encoded_bits_preview);
+            const toggleStageContent = (elementId, content) => {
+                const el = document.getElementById(elementId);
+                if (content) {
+                    el.textContent = content;
+                    el.classList.remove('hidden');
+                } else {
+                    el.textContent = '';
+                    el.classList.add('hidden');
+                }
+            };
 
-            const decodedPreview = document.getElementById('decoded-preview');
-            decodedPreview.textContent = results.decoded_text_preview || '-';
-            decodedPreview.classList.toggle('hidden', !results.decoded_text_preview);
-
-            const hammingPreview = document.getElementById('hamming-preview');
-            hammingPreview.textContent = results.hamming_bits_preview || '-';
-            hammingPreview.classList.toggle('hidden', !results.hamming_bits_preview);
-
-            const corruptedPreview = document.getElementById('corrupted-preview');
-            corruptedPreview.textContent = results.corrupted_bits_preview || '-';
-            corruptedPreview.classList.toggle('hidden', !results.corrupted_bits_preview);
+            toggleStageContent('encoded-preview', results.encoded_bits_preview);
+            toggleStageContent('decoded-preview', results.decoded_text_preview);
+            toggleStageContent('hamming-preview', results.hamming_bits_preview);
+            toggleStageContent('corrupted-preview', results.corrupted_bits_preview);
 
             const corruptedDecode = document.getElementById('corrupted-decode');
-            corruptedDecode.textContent = results.corrupted_decoded_preview || '-';
+            corruptedDecode.textContent = results.corrupted_decoded_preview || '';
             document.getElementById('uncorrected-section').classList.toggle('hidden', !results.corrupted_decoded_preview);
 
             const recoveredPreview = document.getElementById('recovered-preview');
-            recoveredPreview.textContent = results.recovered_bits_preview || '-';
-            recoveredPreview.parentElement.classList.toggle('hidden', !results.recovered_bits_preview && !results.recovered_decoded_preview);
+            const recoveredContainer = recoveredPreview.parentElement;
+            if (results.recovered_bits_preview || results.recovered_decoded_preview) {
+                recoveredPreview.textContent = results.recovered_bits_preview || '';
+                recoveredContainer.classList.remove('hidden');
+            } else {
+                recoveredPreview.textContent = '';
+                recoveredContainer.classList.add('hidden');
+            }
 
             const recoveredText = document.getElementById('recovered-text');
-            recoveredText.textContent = results.recovered_decoded_preview || '-';
+            recoveredText.textContent = results.recovered_decoded_preview || '';
         }
     </script>
 </body>
