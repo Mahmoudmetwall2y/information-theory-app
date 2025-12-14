@@ -323,6 +323,57 @@
                             </div>
                         </div>
 
+                        <!-- Pipeline Outputs -->
+                        <div class="mb-8" id="pipeline-output" style="display: none;">
+                            <h3 class="text-xl font-bold mb-4 text-center text-cyan-300">Pipeline Results</h3>
+                            <div class="space-y-4">
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">1</div>
+                                        <div class="font-semibold">Symbol Analysis</div>
+                                    </div>
+                                    <div class="text-sm text-gray-300" id="probabilities"></div>
+                                </div>
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">2</div>
+                                        <div class="font-semibold">Huffman Encoding</div>
+                                    </div>
+                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="encoded-preview">-</pre>
+                                </div>
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">3</div>
+                                        <div class="font-semibold">Huffman Decoding</div>
+                                    </div>
+                                    <pre class="text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="decoded-preview">-</pre>
+                                </div>
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">4</div>
+                                        <div class="font-semibold">Hamming Encoding</div>
+                                    </div>
+                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="hamming-preview">-</pre>
+                                </div>
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">5</div>
+                                        <div class="font-semibold">Error Simulation</div>
+                                    </div>
+                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="corrupted-preview">-</pre>
+                                    <p class="text-xs text-gray-400 mt-2">Decoded (without correction): <span id="corrupted-decode">-</span></p>
+                                </div>
+                                <div class="bg-slate-800/70 rounded-lg p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">6</div>
+                                        <div class="font-semibold">Error Correction</div>
+                                    </div>
+                                    <pre class="text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto" id="recovered-preview">-</pre>
+                                    <p class="text-xs text-gray-400 mt-2">Recovered Text: <span id="recovered-text">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Results Summary -->
                         <div class="bg-slate-700/50 rounded-lg p-4">
                             <h4 class="font-semibold text-cyan-400 mb-3">Processing Summary</h4>
@@ -582,7 +633,7 @@
         function displayResults(results) {
             const summary = results.summary;
             const metrics = results.quality_metrics;
-            
+
             document.getElementById('symbol-count').textContent = summary.original_length;
             document.getElementById('encoded-bits').textContent = summary.encoded_length;
             document.getElementById('hamming-bits').textContent = summary.hamming_length;
@@ -602,9 +653,30 @@
             
             hammingOkElement.textContent = metrics.hamming_ok ? 'True' : 'False';
             hammingOkElement.className = metrics.hamming_ok ? 'text-green-400' : 'text-red-400';
-            
+
             recoveredOkElement.textContent = metrics.recovered_text_ok ? 'True' : 'False';
             recoveredOkElement.className = metrics.recovered_text_ok ? 'text-green-400' : 'text-red-400';
+
+            // Populate pipeline outputs
+            const probabilitiesEl = document.getElementById('probabilities');
+            if (results.top_probabilities?.length) {
+                const listItems = results.top_probabilities
+                    .map(([char, prob]) => `<li class="flex justify-between"><span class="text-gray-400">${char === ' ' ? '(space)' : char}</span><span class="text-cyan-300 font-mono">${prob.toFixed(4)}</span></li>`)
+                    .join('');
+                probabilitiesEl.innerHTML = `<ul class="space-y-1">${listItems}</ul>`;
+            } else {
+                probabilitiesEl.textContent = 'No probability data available.';
+            }
+
+            document.getElementById('encoded-preview').textContent = results.encoded_bits_preview || '-';
+            document.getElementById('decoded-preview').textContent = results.decoded_text_preview || '-';
+            document.getElementById('hamming-preview').textContent = results.hamming_bits_preview || '-';
+            document.getElementById('corrupted-preview').textContent = results.corrupted_bits_preview || '-';
+            document.getElementById('corrupted-decode').textContent = results.corrupted_decoded_preview || '-';
+            document.getElementById('recovered-preview').textContent = results.recovered_bits_preview || '-';
+            document.getElementById('recovered-text').textContent = results.recovered_decoded_preview || '-';
+
+            document.getElementById('pipeline-output').style.display = 'block';
         }
     </script>
 </body>
