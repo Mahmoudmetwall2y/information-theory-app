@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Theory Project - Academic Excellence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/hero-info-theory.png') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(56, 189, 248, 0.6); }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .slide-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .nav-blur {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-code text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Info Theory Project</h1>
+                        <p class="text-xs text-gray-400">Academic Excellence</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="#overview" class="text-gray-300 hover:text-cyan-400 transition-colors">Overview</a>
+                    <a href="#features" class="text-gray-300 hover:text-cyan-400 transition-colors">Features</a>
+                    <a href="project.html" class="bg-gradient-to-r from-cyan-500 to-purple-600 px-6 py-2 rounded-full text-white font-medium hover:shadow-lg transition-all">
+                        Launch Project
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center">
+        <div class="hero-content w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <div class="slide-in">
+                            <div class="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 text-cyan-400 text-sm">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Information Theory Excellence</span>
+                            </div>
+                        </div>
+                        
+                        <div class="slide-in">
+                            <h1 class="text-5xl lg:text-7xl font-bold leading-tight">
+                                <span class="gradient-text">Huffman</span><br>
+                                <span class="text-white">& Hamming</span><br>
+                                <span class="text-gray-300 text-4xl lg:text-5xl">Coding Systems</span>
+                            </h1>
+                        </div>
+                        
+                        <div class="slide-in">
+                            <p class="text-xl text-gray-300 leading-relaxed max-w-lg">
+                                A sophisticated implementation of data compression and error correction algorithms, 
+                                showcasing the beauty of information theory through elegant code and visual demonstrations.
+                            </p>
+                        </div>
+                        
+                        <div class="slide-in flex flex-col sm:flex-row gap-4">
+                            <a href="project.html" class="bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-4 rounded-full text-white font-semibold hover:shadow-2xl transition-all pulse-glow">
+                                <i class="fas fa-rocket mr-2"></i>
+                                Launch Project
+                            </a>
+                            <a href="documentation.html" class="border border-gray-600 px-8 py-4 rounded-full text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-all">
+                                <i class="fas fa-book mr-2"></i>
+                                Documentation
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="slide-in floating">
+                        <div class="glass-card rounded-2xl p-8">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-cyan-400 mb-2">Live Demo Preview</h3>
+                                <p class="text-gray-400">Huffman Encoding Tree</p>
+                            </div>
+                            <div id="huffman-preview" class="h-64"></div>
+                            <div class="mt-6 text-center">
+                                <div class="inline-flex items-center space-x-2 text-green-400">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span class="text-sm">Interactive visualization ready</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="py-20 bg-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="gradient-text">Project Overview</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    This comprehensive implementation demonstrates advanced information theory concepts 
+                    through practical applications in data compression and error correction.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card rounded-xl p-8 hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-compress-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Huffman Coding</h3>
+                    <p class="text-gray-400 mb-6">
+                        Optimal prefix code compression algorithm that minimizes average codeword length 
+                        based on symbol probabilities.
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Variable-length encoding</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Prefix-free property</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Optimal compression</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-8 hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Hamming Codes</h3>
+                    <p class="text-gray-400 mb-6">
+                        Error correction codes that can detect and correct single-bit errors 
+                        in data transmission and storage.
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Single-error correction</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Double-error detection</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Perfect codes</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-8 hover-lift md:col-span-2 lg:col-span-1">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-cogs text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Complete Pipeline</h3>
+                    <p class="text-gray-400 mb-6">
+                        Integrated workflow combining compression and error correction 
+                        with comprehensive analysis and reporting.
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>6-stage processing</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Real-time analysis</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <i class="fas fa-check mr-2"></i>
+                            <span>Detailed reporting</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="gradient-text">Key Features</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Advanced functionality designed for both educational and practical applications.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="slide-in">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chart-pie text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Probability Analysis</h3>
+                                <p class="text-gray-400">
+                                    Comprehensive symbol frequency analysis with interactive visualizations 
+                                    showing probability distributions and encoding efficiency.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slide-in">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-bug text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Error Simulation</h3>
+                                <p class="text-gray-400">
+                                    Configurable error injection with real-time visualization of corruption 
+                                    effects and correction capabilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slide-in">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-export text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Detailed Reporting</h3>
+                                <p class="text-gray-400">
+                                    Comprehensive output including encoded bitstreams, correction results, 
+                                    and performance metrics with export capabilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in">
+                    <div class="glass-card rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-center">
+                            <span class="gradient-text">Processing Pipeline</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4 p-4 bg-slate-700/50 rounded-lg">
+                                <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                                <div>
+                                    <div class="font-semibold">Symbol Analysis</div>
+                                    <div class="text-sm text-gray-400">Probability calculation</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-slate-700/50 rounded-lg">
+                                <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                                <div>
+                                    <div class="font-semibold">Huffman Encoding</div>
+                                    <div class="text-sm text-gray-400">Optimal compression</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-slate-700/50 rounded-lg">
+                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                                <div>
+                                    <div class="font-semibold">Hamming Encoding</div>
+                                    <div class="text-sm text-gray-400">Error protection</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-slate-700/50 rounded-lg">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                                <div>
+                                    <div class="font-semibold">Error Correction</div>
+                                    <div class="text-sm text-gray-400">Data recovery</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-cyan-500/10 to-purple-600/10">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <div class="slide-in">
+                <h2 class="text-4xl font-bold mb-6">
+                    Ready to Explore Information Theory?
+                </h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Experience the elegance of data compression and error correction algorithms 
+                    through interactive demonstrations and comprehensive analysis.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="project.html" class="bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-4 rounded-full text-white font-semibold hover:shadow-2xl transition-all pulse-glow">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Launch Project
+                    </a>
+                    <a href="documentation.html" class="border border-gray-600 px-8 py-4 rounded-full text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-all">
+                        <i class="fas fa-book mr-2"></i>
+                        View Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-code text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">Information Theory Project</h3>
+                        <p class="text-sm text-gray-400">Academic Excellence in Computer Science</p>
+                    </div>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Information Theory Project. Demonstrating advanced algorithms and data processing techniques.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

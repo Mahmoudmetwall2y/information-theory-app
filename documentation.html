@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Theory Project - Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        .nav-blur {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+        }
+        
+        .code-block {
+            background: rgba(2, 6, 23, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .slide-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .algorithm-step {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .algorithm-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            border-radius: 50%;
+        }
+        
+        .algorithm-step::after {
+            content: '';
+            position: absolute;
+            left: 0.375rem;
+            top: 1.5rem;
+            width: 0.25rem;
+            height: calc(100% - 1rem);
+            background: linear-gradient(180deg, #38bdf8, transparent);
+        }
+        
+        .algorithm-step:last-child::after {
+            display: none;
+        }
+        
+        .math-formula {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .concept-card {
+            transition: all 0.3s ease;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-code text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Info Theory Project</h1>
+                        <p class="text-xs text-gray-400">Documentation</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-cyan-400 transition-colors">
+                        <i class="fas fa-home mr-1"></i>Home
+                    </a>
+                    <a href="project.html" class="text-gray-300 hover:text-cyan-400 transition-colors">
+                        <i class="fas fa-play mr-1"></i>Project
+                    </a>
+                    <a href="#algorithms" class="text-gray-300 hover:text-cyan-400 transition-colors">Algorithms</a>
+                    <a href="#implementation" class="text-gray-300 hover:text-cyan-400 transition-colors">Implementation</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 slide-in">
+                <h1 class="text-5xl lg:text-6xl font-bold mb-6">
+                    <span class="gradient-text">Documentation</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Comprehensive guide to understanding Huffman coding and Hamming error correction algorithms, 
+                    their mathematical foundations, and practical implementations.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="py-16 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-3xl font-bold mb-8 text-center">
+                    <span class="gradient-text">Table of Contents</span>
+                </h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="#introduction" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-info text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Introduction</h3>
+                        </div>
+                        <p class="text-gray-400">Overview of information theory and project objectives</p>
+                    </a>
+                    
+                    <a href="#huffman-coding" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-compress-alt text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Huffman Coding</h3>
+                        </div>
+                        <p class="text-gray-400">Optimal prefix code compression algorithm</p>
+                    </a>
+                    
+                    <a href="#hamming-codes" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Hamming Codes</h3>
+                        </div>
+                        <p class="text-gray-400">Error detection and correction methodology</p>
+                    </a>
+                    
+                    <a href="#algorithms" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-cogs text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Algorithms</h3>
+                        </div>
+                        <p class="text-gray-400">Step-by-step algorithm explanations</p>
+                    </a>
+                    
+                    <a href="#implementation" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-code text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Implementation</h3>
+                        </div>
+                        <p class="text-gray-400">Code structure and technical details</p>
+                    </a>
+                    
+                    <a href="#usage" class="concept-card block p-6 bg-slate-700/50 rounded-lg hover:bg-slate-600/50 transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold ml-4">Usage Guide</h3>
+                        </div>
+                        <p class="text-gray-400">How to use the project interface</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section id="introduction" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Introduction to Information Theory</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-cyan-400">What is Information Theory?</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Information theory is a mathematical study of information storage and communication. 
+                            It was originally proposed by Claude Shannon in 1948 to find fundamental limits on 
+                            signal processing and communication operations such as data compression.
+                        </p>
+                        
+                        <h3 class="text-2xl font-bold mb-4 text-purple-400">Key Concepts</h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span><strong>Entropy:</strong> Measure of information uncertainty or randomness</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span><strong>Compression:</strong> Reducing data size while preserving information</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span><strong>Error Correction:</strong> Detecting and fixing transmission errors</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span><strong>Channel Capacity:</strong> Maximum information transmission rate</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-green-400">Project Objectives</h3>
+                        <div class="space-y-4">
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">1. Huffman Coding Implementation</h4>
+                                <p class="text-gray-400 text-sm">
+                                    Demonstrate optimal prefix coding for lossless data compression
+                                </p>
+                            </div>
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">2. Hamming Error Correction</h4>
+                                <p class="text-gray-400 text-sm">
+                                    Implement single-error correction and double-error detection
+                                </p>
+                            </div>
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">3. Complete Pipeline</h4>
+                                <p class="text-gray-400 text-sm">
+                                    Integrate compression and error correction in a unified system
+                                </p>
+                            </div>
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">4. Educational Visualization</h4>
+                                <p class="text-gray-400 text-sm">
+                                    Provide interactive demonstrations and comprehensive analysis
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Huffman Coding -->
+    <section id="huffman-coding" class="py-16 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Huffman Coding</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-cyan-400">Algorithm Overview</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Huffman coding is a lossless data compression algorithm that assigns variable-length 
+                            codes to input characters based on their frequencies. The most frequent characters 
+                            get the shortest codes, while the least frequent characters get the longest codes.
+                        </p>
+                        
+                        <h3 class="text-2xl font-bold mb-4 text-purple-400">Key Properties</h3>
+                        <div class="space-y-4">
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Prefix-Free Property</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    No code is a prefix of another code, ensuring unambiguous decoding.
+                                </p>
+                            </div>
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Optimal Compression</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Produces the minimum expected code length among all prefix codes.
+                                </p>
+                            </div>
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Variable Length</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Code length varies inversely with symbol probability.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-green-400">Mathematical Foundation</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-2">Entropy Formula</h4>
+                            <div class="math-formula">
+                                H(X) = -Σ p(x) log₂ p(x)
+                            </div>
+                            <p class="text-gray-400 text-sm">
+                                Where H(X) is the entropy and p(x) is the probability of symbol x.
+                            </p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-2">Average Code Length</h4>
+                            <div class="math-formula">
+                                L = Σ p(x) × length(code(x))
+                            </div>
+                            <p class="text-gray-400 text-sm">
+                                The expected length of the Huffman code.
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Compression Ratio</h4>
+                            <div class="math-formula">
+                                CR = (Original Size) / (Compressed Size)
+                            </div>
+                            <p class="text-gray-400 text-sm">
+                                Measures the effectiveness of compression.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hamming Codes -->
+    <section id="hamming-codes" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Hamming Error Correction Codes</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-cyan-400">Algorithm Overview</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Hamming codes are a family of linear error-correcting codes that can detect 
+                            and correct single-bit errors. They are perfect codes, meaning they achieve 
+                            the maximum possible rate for codes with their block length and minimum distance.
+                        </p>
+                        
+                        <h3 class="text-2xl font-bold mb-4 text-purple-400">Hamming(7,4) Code</h3>
+                        <p class="text-gray-300 mb-4">
+                            This project implements the Hamming(7,4) code, which encodes 4 data bits 
+                            into 7 bits by adding 3 parity bits. It can correct any single-bit error.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center text-green-400">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>4 data bits + 3 parity bits = 7 total bits</span>
+                            </div>
+                            <div class="flex items-center text-green-400">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Can correct any single-bit error</span>
+                            </div>
+                            <div class="flex items-center text-green-400">
+                                <i class="fas fa-check-circle mr-3"></i>
+                                <span>Can detect all double-bit errors</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-green-400">Parity Check Matrix</h3>
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-2">Generator Matrix (G)</h4>
+                            <div class="code-block rounded-lg p-4 text-sm">
+                                [1 0 0 0 1 1 0]<br>
+                                [0 1 0 0 1 0 1]<br>
+                                [0 0 1 0 0 1 1]<br>
+                                [0 0 0 1 1 1 1]
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-2">Parity-Check Matrix (H)</h4>
+                            <div class="code-block rounded-lg p-4 text-sm">
+                                [1 1 0 1 1 0 0]<br>
+                                [1 0 1 1 0 1 0]<br>
+                                [0 1 1 1 0 0 1]
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Error Correction Process</h4>
+                            <div class="space-y-2 text-sm text-gray-400">
+                                <div>1. Compute syndrome: s = H × rᵀ</div>
+                                <div>2. If s = 0, no error detected</div>
+                                <div>3. If s ≠ 0, error position = s (binary)</div>
+                                <div>4. Flip the erroneous bit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithms -->
+    <section id="algorithms" class="py-16 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Algorithm Details</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-cyan-400">Huffman Coding Algorithm</h3>
+                        <div class="space-y-6">
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 1: Calculate Frequencies</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Count the frequency of each symbol in the input text.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    frequency = Counter(text)<br>
+                                    total = sum(frequency.values())<br>
+                                    probability = {sym: count/total for sym, count in frequency.items()}
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 2: Build Huffman Tree</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Create a binary tree where leaves represent symbols and paths represent codes.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    heap = [HuffmanNode(sym, prob) for sym, prob in probabilities.items()]<br>
+                                    while len(heap) > 1:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;left = heappop(heap)<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;right = heappop(heap)<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;parent = HuffmanNode(None, left.prob + right.prob, left, right)<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;heappush(heap, parent)
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 3: Generate Codes</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Traverse the tree to assign binary codes to each symbol.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    def traverse(node, prefix=""):<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;if node.symbol is not None:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;codes[node.symbol] = prefix or "0"<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;if node.left:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traverse(node.left, prefix + "0")<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;if node.right:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traverse(node.right, prefix + "1")
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 4: Encode Text</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Replace each symbol with its corresponding Huffman code.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    encoded = "".join(codes[char] for char in text)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-purple-400">Hamming(7,4) Algorithm</h3>
+                        <div class="space-y-6">
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 1: Pad Data</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Ensure the input bitstream length is a multiple of 4.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    pad_bits = (4 - (len(bits) % 4)) % 4<br>
+                                    bits_padded = bits + "0" * pad_bits
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 2: Calculate Parity Bits</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Compute parity bits for each 4-bit data block.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    for i in range(0, len(bits_padded), 4):<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;d1, d2, d3, d4 = bits_padded[i:i+4]<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;p1 = d1 ^ d2 ^ d4<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;p2 = d1 ^ d3 ^ d4<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;p4 = d2 ^ d3 ^ d4<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;codeword = [p1, p2, d1, p4, d2, d3, d4]
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 3: Error Detection</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Compute syndrome to detect error position.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    s1 = p1 ^ d1 ^ d2 ^ d4<br>
+                                    s2 = p2 ^ d1 ^ d3 ^ d4<br>
+                                    s4 = p4 ^ d2 ^ d3 ^ d4<br>
+                                    error_pos = s1 + (s2 << 1) + (s4 << 2)
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 4: Error Correction</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Flip the erroneous bit and extract data bits.
+                                </p>
+                                <div class="code-block rounded-lg p-3 text-xs">
+                                    if error_pos != 0:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;bits[error_pos - 1] ^= 1<br>
+                                    data_bits = [d1, d2, d3, d4]  # Extract data bits<br>
+                                    if pad_bits > 0:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;data_bits = data_bits[:-pad_bits]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation -->
+    <section id="implementation" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Implementation Details</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-cyan-400">Code Structure</h3>
+                        <div class="space-y-4">
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-purple-400">app.py</h4>
+                                <p class="text-gray-400 text-sm mb-2">
+                                    Flask web application handling HTTP requests and responses.
+                                </p>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• File upload and validation</li>
+                                    <li>• Parameter processing</li>
+                                    <li>• Results presentation</li>
+                                    <li>• Error handling</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-purple-400">codec.py</h4>
+                                <p class="text-gray-400 text-sm mb-2">
+                                    Core algorithms for Huffman coding and Hamming error correction.
+                                </p>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• Huffman tree construction</li>
+                                    <li>• Code generation and encoding</li>
+                                    <li>• Hamming(7,4) encoding/decoding</li>
+                                    <li>• Error simulation and correction</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-green-400">Key Classes and Functions</h3>
+                        <div class="space-y-4">
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-cyan-400">HuffmanNode</h4>
+                                <p class="text-gray-400 text-sm mb-2">
+                                    Represents nodes in the Huffman tree.
+                                </p>
+                                <div class="code-block rounded-lg p-2 text-xs">
+                                    class HuffmanNode:<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, symbol, prob, left=None, right=None):
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-cyan-400">Core Functions</h4>
+                                <ul class="text-sm text-gray-400 space-y-1">
+                                    <li>• <code>compute_symbol_probabilities()</code> - Calculate symbol frequencies</li>
+                                    <li>• <code>build_huffman_tree()</code> - Construct optimal prefix tree</li>
+                                    <li>• <code>hamming_7_4_encode()</code> - Add error correction codes</li>
+                                    <li>• <code>hamming_7_4_decode()</code> - Detect and correct errors</li>
+                                    <li>• <code>run_full_pipeline()</code> - Execute complete processing chain</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Guide -->
+    <section id="usage" class="py-16 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-xl p-8 slide-in">
+                <h2 class="text-4xl font-bold mb-8">
+                    <span class="gradient-text">Usage Guide</span>
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-cyan-400">Getting Started</h3>
+                        <div class="space-y-6">
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 1: Upload File</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Select a text file (.txt) or use one of the provided sample files.
+                                </p>
+                                <div class="bg-slate-700/30 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Supported format: UTF-8 encoded text files
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 2: Configure Parameters</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Set the error interval for bit flipping simulation.
+                                </p>
+                                <div class="bg-slate-700/30 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">
+                                        <i class="fas fa-sliders-h mr-1"></i>
+                                        Range: 1-100 bits (default: 50)
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="algorithm-step">
+                                <h4 class="font-semibold mb-2">Step 3: Run Pipeline</h4>
+                                <p class="text-gray-400 text-sm mb-3">
+                                    Execute the complete Huffman + Hamming processing chain.
+                                </p>
+                                <div class="bg-slate-700/30 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500">
+                                        <i class="fas fa-play mr-1"></i>
+                                        Processing time depends on file size
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-purple-400">Understanding Results</h3>
+                        <div class="space-y-4">
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-cyan-400">Status Indicators</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
+                                        <span class="text-gray-300">Huffman OK: Compression successful</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
+                                        <span class="text-gray-300">Hamming OK: Error correction working</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full mr-3"></div>
+                                        <span class="text-gray-300">Recovered Text OK: Original message restored</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-purple-400">Key Metrics</h4>
+                                <ul class="text-sm text-gray-400 space-y-1">
+                                    <li>• <strong>Symbol Count:</strong> Number of unique characters</li>
+                                    <li>• <strong>Encoded Bits:</strong> Length after Huffman compression</li>
+                                    <li>• <strong>Hamming Bits:</strong> Length after error correction codes</li>
+                                    <li>• <strong>Compression Ratio:</strong> Original vs compressed size</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-slate-700/50 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2 text-green-400">Output Files</h4>
+                                <ul class="text-sm text-gray-400 space-y-1">
+                                    <li>• Symbol probabilities and codes</li>
+                                    <li>• Encoded bitstreams at each stage</li>
+                                    <li>• Error simulation results</li>
+                                    <li>• Correction performance metrics</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-code text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">Information Theory Project</h3>
+                        <p class="text-sm text-gray-400">Academic Excellence in Computer Science</p>
+                    </div>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    © 2025 Information Theory Project. Advanced algorithms and data processing.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
