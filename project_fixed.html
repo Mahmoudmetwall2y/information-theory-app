@@ -400,26 +400,6 @@ t file">
                                             <p class="text-sm text-gray-300">Recovered Text: <span id="recovered-text" class="text-white/90">-</span></p>
                                         </div>
                                     </div>
-                                    <div class="stage-card__body space-y-3">
-                                        <p id="recovered-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
-                                        <div id="error-correction-results" class="stage-output hidden space-y-2">
-                                            <pre id="recovered-preview" class="text-xs preview-surface bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
-                                            <p class="text-sm text-gray-300">Recovered Text: <span id="recovered-text" class="text-white/90">-</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="uncorrected-section" class="mb-8 hidden">
-                            <div class="stage-card">
-                                <div class="stage-card__header text-red-200">
-                                    <span class="stage-chip text-red-200 border border-red-400/30"><i class="fas fa-exclamation-triangle"></i> Decoded Without Correction</span>
-                                    <span class="text-xs text-gray-400">Post-simulation preview</span>
-                                </div>
-                                <div class="stage-card__body space-y-2">
-                                    <p class="text-sm text-gray-400">Text obtained after error simulation without applying Hamming correction.</p>
-                                    <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
                                 </div>
                             </div>
                         </div>
@@ -631,84 +611,13 @@ t file">
             });
         }
 
-        function getApiBaseUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const queryBase = urlParams.get('apiBaseUrl');
-            if (queryBase) {
-                localStorage.setItem('apiBaseUrl', queryBase);
-            }
-
-            return (
-                queryBase ||
-                window.API_BASE_URL ||
-                localStorage.getItem('apiBaseUrl') ||
-                document.querySelector('meta[name="api-base-url"]')?.content ||
-                window.location.origin
-            ).replace(/\/$/, '');
-        }
-
-        function buildApiEndpoints(baseUrl) {
-            const trimmedBase = baseUrl.replace(/\/$/, '');
-            const endpoints = [
-                `${trimmedBase}/api/process`,
-                `${trimmedBase}/.netlify/functions/process`,
-                `${trimmedBase}/.netlify/functions/api/process`
-            ];
-
-            return Array.from(new Set(endpoints));
-        }
-
-        async function requestPipeline(payload) {
-            const endpoints = buildApiEndpoints(getApiBaseUrl());
-            let lastError = 'Unable to reach the processing endpoint.';
-
-            for (const endpoint of endpoints) {
-                try {
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const responseText = await response.text();
-                    let responseData = null;
-                    try {
-                        responseData = responseText ? JSON.parse(responseText) : null;
-                    } catch (parseError) {
-                        throw new Error('Invalid response format from the server.');
-                    }
-
-                    if (!response.ok) {
-                        const message = responseData?.error || responseText || `HTTP error! status: ${response.status}`;
-                        if (response.status === 404) {
-                            lastError = `Endpoint not found at ${endpoint}`;
-                            continue;
-                        }
-                        throw new Error(message);
-                    }
-
-                    if (!responseData) {
-                        throw new Error('Empty response received from the server.');
-                    }
-
-                    return responseData;
-                } catch (error) {
-                    lastError = error.message || String(error);
-                }
-            }
-
-            throw new Error(`${lastError}. Please verify the backend URL or Netlify function path.`);
-        }
-
         // Real pipeline execution with Flask backend integration
         document.getElementById('run-pipeline').addEventListener('click', async function() {
             if (!window.uploadedFileContent) {
                 alert('Please upload a text file first');
                 return;
             }
-
+            
             const button = this;
             const progressContainer = document.getElementById('progress-container');
             const progressFill = document.getElementById('progress-fill');
@@ -736,10 +645,35 @@ t file">
                     progressPercentage.textContent = `${Math.round(progress)}%`;
                 }, 200);
 
-                const results = await requestPipeline({
-                    text: window.uploadedFileContent,
-                    error_interval: errorInterval
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: window.uploadedFileContent,
+                        error_interval: errorInterval
+                    })
                 });
+
+                const responseText = await response.text();
+                let responseData = null;
+                try {
+                    responseData = responseText ? JSON.parse(responseText) : null;
+                } catch (parseError) {
+                    throw new Error('Invalid response format from the server.');
+                }
+
+                if (!response.ok) {
+                    const message = responseData?.error || responseText || `HTTP error! status: ${response.status}`;
+                    throw new Error(message);
+                }
+
+                if (!responseData) {
+                    throw new Error('Empty response received from the server.');
+                }
+
+                const results = responseData;
                 
                 progressFill.style.width = '100%';
                 progressPercentage.textContent = '100%';
