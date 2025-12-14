@@ -152,13 +152,14 @@
                         <!-- File Upload -->
                         <div class="mb-8">
                             <label class="block text-sm font-medium mb-3">Upload Text File</label>
-                            <div class="upload-zone rounded-lg p-8 text-center cursor-pointer" id="upload-zone">
-                                <div class="mb-4">
+                            <div class="upload-zone relative rounded-lg p-8 text-center cursor-pointer" id="upload-zone">
+                                <div class="mb-4 pointer-events-none">
                                     <i class="fas fa-cloud-upload-alt text-4xl text-cyan-400 mb-4"></i>
                                     <p class="text-gray-300 mb-2">Drag & drop your file here</p>
                                     <p class="text-sm text-gray-500">or click to browse</p>
                                 </div>
-                                <input type="file" id="file-input" accept=".txt" class="hidden">
+                                <input type="file" id="file-input" accept=".txt"
+                                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" aria-label="Upload text file">
                                 <div id="file-info" class="hidden">
                                     <div class="bg-slate-700 rounded-lg p-4 text-left">
                                         <div class="flex items-center justify-between">
