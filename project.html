@@ -409,6 +409,14 @@
                             </div>
                         </div>
 
+                        <div id="uncorrected-section" class="mb-8 hidden">
+                            <h3 class="text-lg font-semibold text-red-300 mb-2 flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>Decoded Without Correction</h3>
+                            <div class="bg-slate-800/60 rounded-lg p-4">
+                                <p class="text-sm text-gray-400 mb-2">Text obtained after error simulation without applying Hamming correction.</p>
+                                <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
+                            </div>
+                        </div>
+
                         <!-- Results Summary -->
                         <div class="bg-slate-700/50 rounded-lg p-4">
                             <h4 class="font-semibold text-cyan-400 mb-3">Processing Summary</h4>
