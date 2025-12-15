@@ -73,6 +73,52 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
+        .stage-card {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.75));
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+            border-radius: 16px;
+        }
+
+        .stage-card__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+            background: rgba(255, 255, 255, 0.02);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .stage-card__body {
+            padding: 16px;
+        }
+
+        .stage-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .preview-surface {
+            background: rgba(2, 6, 23, 0.7);
+            border: 1px dashed rgba(148, 163, 184, 0.2);
+        }
+
+        .preview-placeholder {
+            color: #94a3b8;
+        }
         
         .code-block {
             background: rgba(2, 6, 23, 0.9);
@@ -152,13 +198,15 @@
                         <!-- File Upload -->
                         <div class="mb-8">
                             <label class="block text-sm font-medium mb-3">Upload Text File</label>
-                            <div class="upload-zone rounded-lg p-8 text-center cursor-pointer" id="upload-zone">
-                                <div class="mb-4">
+                            <div class="upload-zone relative rounded-lg p-8 text-center cursor-pointer" id="upload-zone">
+                                <div class="mb-4 pointer-events-none">
                                     <i class="fas fa-cloud-upload-alt text-4xl text-cyan-400 mb-4"></i>
                                     <p class="text-gray-300 mb-2">Drag & drop your file here</p>
                                     <p class="text-sm text-gray-500">or click to browse</p>
                                 </div>
-                                <input type="file" id="file-input" accept=".txt" class="hidden">
+                                <input type="file" id="file-input" accept=".txt"
+                                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" aria-label="Upload tex
+t file">
                                 <div id="file-info" class="hidden">
                                     <div class="bg-slate-700 rounded-lg p-4 text-left">
                                         <div class="flex items-center justify-between">
@@ -276,48 +324,88 @@
                             <h3 class="text-xl font-bold mb-4 text-center">
                                 <span class="gradient-text">6-Stage Processing Pipeline</span>
                             </h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">1</div>
-                                    <div>
-                                        <div class="font-semibold text-cyan-400">Symbol Analysis</div>
-                                        <div class="text-sm text-gray-400">Calculate character probabilities and frequencies</div>
+
+                            <div class="space-y-4">
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-cyan-200">
+                                        <span class="stage-chip text-cyan-200 border border-cyan-400/30"><i class="fas fa-signal"></i> Stage 1 · Symbol Analysis</span>
+                                        <span class="text-xs text-gray-400">Symbol Probabilities (Top 10)</span>
+                                    </div>
+                                    <div class="stage-card__body space-y-3">
+                                        <div id="probabilities-chart" class="h-56 w-full"></div>
+                                        <p id="probabilities-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">2</div>
-                                    <div>
-                                        <div class="font-semibold text-cyan-400">Huffman Encoding</div>
-                                        <div class="text-sm text-gray-400">Build optimal prefix tree and generate codes</div>
+
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-cyan-100">
+                                        <span class="stage-chip text-cyan-200 border border-cyan-400/30"><i class="fas fa-lock"></i> Stage 2 · Huffman Encoding</span>
+                                        <span class="text-xs text-gray-400">Encoded Bits (First 200)</span>
+                                    </div>
+                                    <div class="stage-card__body space-y-2">
+                                        <p id="encoded-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <pre id="encoded-preview" class="stage-output hidden preview-surface text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">3</div>
-                                    <div>
-                                        <div class="font-semibold text-cyan-400">Huffman Decoding</div>
-                                        <div class="text-sm text-gray-400">Decode compressed bitstream back to text</div>
+
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-cyan-100">
+                                        <span class="stage-chip text-cyan-200 border border-cyan-400/30"><i class="fas fa-unlock"></i> Stage 3 · Huffman Decoding</span>
+                                        <span class="text-xs text-gray-400">Decoded Text (First 200)</span>
+                                    </div>
+                                    <div class="stage-card__body space-y-2">
+                                        <p id="decoded-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <pre id="decoded-preview" class="stage-output hidden preview-surface text-sm bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">4</div>
-                                    <div>
-                                        <div class="font-semibold text-purple-400">Hamming Encoding</div>
-                                        <div class="text-sm text-gray-400">Add error correction codes (7,4) to bitstream</div>
+
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-purple-100">
+                                        <span class="stage-chip text-purple-200 border border-purple-400/30"><i class="fas fa-shield-alt"></i> Stage 4 · Hamming Encoding</span>
+                                        <span class="text-xs text-gray-400">Hamming Bits (First 200)</span>
+                                    </div>
+                                    <div class="stage-card__body space-y-2">
+                                        <p id="hamming-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <pre id="hamming-preview" class="stage-output hidden preview-surface text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">5</div>
-                                    <div>
-                                        <div class="font-semibold text-red-400">Error Simulation</div>
-                                        <div class="text-sm text-gray-400">Inject bit errors and decode without correction</div>
+
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-red-100">
+                                        <span class="stage-chip text-red-200 border border-red-400/30"><i class="fas fa-bolt"></i> Stage 5 · Error Simulation</span>
+                                        <span class="text-xs text-gray-400">Corrupted Bits (First 200)</span>
+                                    </div>
+                                    <div class="stage-card__body space-y-2">
+                                        <p id="corrupted-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <pre id="corrupted-preview" class="stage-output hidden preview-surface text-xs bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-3 bg-slate-700/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">6</div>
-                                    <div>
-                                        <div class="font-semibold text-green-400">Error Correction</div>
-                                        <div class="text-sm text-gray-400">Detect and correct errors using Hamming codes</div>
+
+                                <div class="stage-card">
+                                    <div class="stage-card__header text-emerald-100">
+                                        <span class="stage-chip text-emerald-200 border border-emerald-400/30"><i class="fas fa-heartbeat"></i> Stage 6 · Error Correction</span>
+                                        <span class="text-xs text-gray-400">Recovered Bits (First 200)</span>
                                     </div>
+                                    <div class="stage-card__body space-y-3">
+                                        <p id="recovered-placeholder" class="preview-placeholder text-sm">Waiting for results...</p>
+                                        <div id="error-correction-results" class="stage-output hidden space-y-2">
+                                            <pre id="recovered-preview" class="text-xs preview-surface bg-slate-900/80 p-3 rounded-lg overflow-x-auto"></pre>
+                                            <p class="text-sm text-gray-300">Recovered Text: <span id="recovered-text" class="text-white/90">-</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="uncorrected-section" class="mb-8 hidden">
+                            <div class="stage-card">
+                                <div class="stage-card__header text-red-200">
+                                    <span class="stage-chip text-red-200 border border-red-400/30"><i class="fas fa-exclamation-triangle"></i> Decoded Without Correction</span>
+                                    <span class="text-xs text-gray-400">Post-simulation preview</span>
+                                </div>
+                                <div class="stage-card__body space-y-2">
+                                    <p class="text-sm text-gray-400">Text obtained after error simulation without applying Hamming correction.</p>
+                                    <p class="text-sm text-gray-200"><span class="text-xs uppercase tracking-wide text-gray-400 mr-2">Output:</span><span id="corrupted-decode">-</span></p>
                                 </div>
                             </div>
                         </div>
@@ -406,7 +494,10 @@
             const removeFile = document.getElementById('remove-file');
             const runButton = document.getElementById('run-pipeline');
 
-            uploadZone.addEventListener('click', () => fileInput.click());
+            // Reset the input on every click so selecting the same file fires a change event
+            fileInput.addEventListener('click', () => {
+                fileInput.value = '';
+            });
             
             uploadZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -437,6 +528,7 @@
                 fileInfo.classList.add('hidden');
                 uploadZone.querySelector('div').style.display = 'block';
                 runButton.disabled = true;
+                window.uploadedFileContent = '';
             });
 
             function handleFileSelect(file) {
@@ -499,13 +591,94 @@
             });
         }
 
+        function getApiBaseUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryBase = urlParams.get('apiBaseUrl');
+            if (queryBase) {
+                localStorage.setItem('apiBaseUrl', queryBase);
+            }
+
+            return (
+                queryBase ||
+                window.API_BASE_URL ||
+                localStorage.getItem('apiBaseUrl') ||
+                document.querySelector('meta[name="api-base-url"]')?.content ||
+                window.location.origin
+            ).replace(/\/$/, '');
+        }
+
+        function buildApiEndpoints(baseUrl) {
+            const trimmedBase = baseUrl.replace(/\/$/, '');
+            const endpoints = [
+                `${trimmedBase}/api/process`,
+                `${trimmedBase}/.netlify/functions/process`,
+                `${trimmedBase}/.netlify/functions/api/process`
+            ];
+
+            return Array.from(new Set(endpoints));
+        }
+
+        async function requestPipeline(payload) {
+            const endpoints = buildApiEndpoints(getApiBaseUrl());
+            let lastError = 'Unable to reach the processing endpoint.';
+
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const responseText = await response.text();
+                    const contentType = response.headers.get('content-type') || '';
+                    let responseData = null;
+                    if (responseText) {
+                        if (contentType.includes('application/json')) {
+                            try {
+                                responseData = JSON.parse(responseText);
+                            } catch (parseError) {
+                                throw new Error(`Invalid JSON response from ${endpoint}. Received: ${responseText.slice(0, 120)}`);
+                            }
+                        } else {
+                            responseData = responseText.trim();
+                        }
+                    }
+
+                    if (!response.ok) {
+                        const message =
+                            (responseData && typeof responseData === 'object' ? responseData.error : responseData) ||
+                            responseText ||
+                            `HTTP error! status: ${response.status}`;
+                        if (response.status === 404) {
+                            lastError = `Endpoint not found at ${endpoint}`;
+                            continue;
+                        }
+                        throw new Error(message);
+                    }
+
+                    if (!responseData || typeof responseData === 'string') {
+                        throw new Error(`Unexpected response from ${endpoint}. Ensure the backend returns JSON.`);
+                    }
+
+                    return responseData;
+                } catch (error) {
+                    lastError = error.message || String(error);
+                }
+            }
+
+            throw new Error(`${lastError}. Please verify the backend URL or Netlify function path.`);
+        }
+
         // Real pipeline execution with Flask backend integration
         document.getElementById('run-pipeline').addEventListener('click', async function() {
             if (!window.uploadedFileContent) {
                 alert('Please upload a text file first');
                 return;
             }
-            
+
             const button = this;
             const progressContainer = document.getElementById('progress-container');
             const progressFill = document.getElementById('progress-fill');
@@ -521,36 +694,22 @@
             pipelineStatus.className = 'status-indicator status-running';
             pipelineStatusText.textContent = 'Running';
 
+            let progressInterval;
             try {
                 const errorInterval = parseInt(document.getElementById('error-interval').value);
-                
+
                 let progress = 0;
-                const progressInterval = setInterval(() => {
+                progressInterval = setInterval(() => {
                     progress += Math.random() * 15;
                     if (progress > 95) progress = 95;
                     progressFill.style.width = `${progress}%`;
                     progressPercentage.textContent = `${Math.round(progress)}%`;
                 }, 200);
 
-                const response = await fetch('/api/process', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        text: window.uploadedFileContent,
-                        error_interval: errorInterval
-                    })
+                const results = await requestPipeline({
+                    text: window.uploadedFileContent,
+                    error_interval: errorInterval
                 });
-
-                clearInterval(progressInterval);
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-                }
-
-                const results = await response.json();
                 
                 progressFill.style.width = '100%';
                 progressPercentage.textContent = '100%';
@@ -575,13 +734,17 @@
                 statusText.textContent = 'Processing failed';
                 pipelineStatus.className = 'status-indicator status-error';
                 pipelineStatusText.textContent = 'Error';
+            } finally {
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                }
             }
         });
 
         function displayResults(results) {
             const summary = results.summary;
             const metrics = results.quality_metrics;
-            
+
             document.getElementById('symbol-count').textContent = summary.original_length;
             document.getElementById('encoded-bits').textContent = summary.encoded_length;
             document.getElementById('hamming-bits').textContent = summary.hamming_length;
@@ -601,9 +764,115 @@
             
             hammingOkElement.textContent = metrics.hamming_ok ? 'True' : 'False';
             hammingOkElement.className = metrics.hamming_ok ? 'text-green-400' : 'text-red-400';
-            
+
             recoveredOkElement.textContent = metrics.recovered_text_ok ? 'True' : 'False';
             recoveredOkElement.className = metrics.recovered_text_ok ? 'text-green-400' : 'text-red-400';
+
+            // Populate pipeline outputs inline with each stage
+            const probabilitiesPlaceholder = document.getElementById('probabilities-placeholder');
+            const probabilitiesChart = document.getElementById('probabilities-chart');
+            if (results.top_probabilities?.length) {
+                probabilitiesPlaceholder.classList.add('hidden');
+                probabilitiesChart.classList.remove('hidden');
+                renderProbabilitiesChart(results.top_probabilities.slice(0, 10));
+            } else {
+                probabilitiesPlaceholder.classList.remove('hidden');
+                probabilitiesChart.classList.add('hidden');
+                const existingChart = echarts.getInstanceByDom(probabilitiesChart);
+                if (existingChart) existingChart.dispose();
+            }
+
+            const setPreview = (previewId, placeholderId, content) => {
+                const previewEl = document.getElementById(previewId);
+                const placeholderEl = document.getElementById(placeholderId);
+                if (content) {
+                    previewEl.textContent = content;
+                    previewEl.classList.remove('hidden');
+                    placeholderEl.classList.add('hidden');
+                } else {
+                    previewEl.textContent = '';
+                    previewEl.classList.add('hidden');
+                    placeholderEl.classList.remove('hidden');
+                }
+            };
+
+            setPreview('encoded-preview', 'encoded-placeholder', results.encoded_bits_preview);
+            setPreview('decoded-preview', 'decoded-placeholder', results.decoded_text_preview);
+            setPreview('hamming-preview', 'hamming-placeholder', results.hamming_bits_preview);
+            setPreview('corrupted-preview', 'corrupted-placeholder', results.corrupted_bits_preview);
+
+            const corruptedDecode = document.getElementById('corrupted-decode');
+            corruptedDecode.textContent = results.corrupted_decoded_preview || '';
+            document.getElementById('uncorrected-section').classList.toggle('hidden', !results.corrupted_decoded_preview);
+
+            const recoveredPreview = document.getElementById('recovered-preview');
+            const recoveredContainer = recoveredPreview.parentElement;
+            const recoveredPlaceholder = document.getElementById('recovered-placeholder');
+            if (results.recovered_bits_preview || results.recovered_decoded_preview) {
+                recoveredPlaceholder.classList.add('hidden');
+                recoveredPreview.textContent = results.recovered_bits_preview || '';
+                recoveredContainer.classList.remove('hidden');
+            } else {
+                recoveredPlaceholder.classList.remove('hidden');
+                recoveredPreview.textContent = '';
+                recoveredContainer.classList.add('hidden');
+            }
+
+            const recoveredText = document.getElementById('recovered-text');
+            recoveredText.textContent = results.recovered_decoded_preview || '';
+        }
+
+        function renderProbabilitiesChart(probabilities) {
+            const chartDom = document.getElementById('probabilities-chart');
+            if (!chartDom) return;
+
+            const existingChart = echarts.getInstanceByDom(chartDom);
+            if (existingChart) existingChart.dispose();
+
+            const labels = probabilities.map(([char]) => char === ' ' ? '(space)' : char);
+            const values = probabilities.map(([, prob]) => Number(prob.toFixed(4)));
+
+            const chart = echarts.init(chartDom);
+            chart.setOption({
+                grid: { left: 0, right: 12, bottom: 0, top: 20, containLabel: true },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: { color: '#cbd5e1' },
+                    splitLine: { show: false }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: labels,
+                    axisLabel: { color: '#e2e8f0' },
+                    axisLine: { show: false },
+                    axisTick: { show: false }
+                },
+                series: [{
+                    data: values,
+                    type: 'bar',
+                    barWidth: '60%',
+                    itemStyle: {
+                        borderRadius: [4, 4, 4, 4],
+                        color: new echarts.graphic.LinearGradient(1, 0, 0, 1, [
+                            { offset: 0, color: '#34d399' },
+                            { offset: 1, color: '#22d3ee' }
+                        ])
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#cbd5e1',
+                        formatter: ({ value }) => value
+                    }
+                }],
+                tooltip: {
+                    trigger: 'item',
+                    formatter: params => `${params.name}: ${params.value}`,
+                    backgroundColor: 'rgba(15,23,42,0.9)',
+                    borderColor: 'rgba(148, 163, 184, 0.3)',
+                    textStyle: { color: '#e2e8f0' }
+                }
+            });
         }
     </script>
 </body>
